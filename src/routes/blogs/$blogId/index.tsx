@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase-client';
 import type { BlogEntry } from '@/types/BlogEntry';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 const fetchBlog = async (slug: string) => {
   const { error, data } = await supabase
@@ -28,5 +28,15 @@ function BlogPage() {
   const blog: BlogEntry = Route.useLoaderData();
   console.log(blog);
 
-  return <div>Hello {blog.title}!</div>;
+  return (
+    <div>
+      <Link
+        to="/"
+        className="text-blue-400 font-semibold cursor-pointer hover:font-bold"
+      >
+        ← Back to Home
+      </Link>
+      <p className="mt-5">Hello {blog.title}!</p>
+    </div>
+  );
 }
