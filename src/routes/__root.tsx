@@ -9,9 +9,11 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   return (
-    <>
+    <div className="min-h-screen bg-gray-400 px-10 md:px-30 lg:px-60 py-15 text-gray-100">
       <Navbar />
-      <Outlet />
+      <main className="bg-gray-700 rounded-md py-6 px-8 shadow-lg">
+        <Outlet />
+      </main>
       <TanStackDevtools
         config={{
           position: 'bottom-right',
@@ -23,6 +25,6 @@ function RootLayout() {
           },
         ]}
       />
-    </>
+    </div>
   );
 }
