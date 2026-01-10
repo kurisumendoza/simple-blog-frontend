@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { supabase } from '@/supabase-client';
+import { supabase } from '@/lib/supabase-client';
 import Navbar from '@/components/Navbar';
 
 const fetchBlogs = async () => {
