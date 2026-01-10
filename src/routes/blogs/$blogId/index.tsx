@@ -26,7 +26,6 @@ export const Route = createFileRoute('/blogs/$blogId/')({
 
 function BlogPage() {
   const blog: BlogEntry = Route.useLoaderData();
-  console.log(blog);
 
   return (
     <div>
@@ -36,7 +35,23 @@ function BlogPage() {
       >
         ← Back to Home
       </Link>
-      <p className="mt-5">Hello {blog.title}!</p>
+      <h2 className="text-2xl font-bold mt-3">{blog.title}</h2>
+      <div className="flex justify-between text-sm">
+        <div>
+          <span>by: </span>
+          <span className="font-bold text-sky-200">{blog.user}</span>
+        </div>
+        <span className="italic">
+          {new Date(blog.created_at).toLocaleDateString('en-PH', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+          })}
+        </span>
+      </div>
+      <p className="my-5">{blog.body}</p>
     </div>
   );
 }
