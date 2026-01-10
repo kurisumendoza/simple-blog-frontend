@@ -3,7 +3,7 @@ import BlogPost from './BlogPost';
 
 const BlogList = ({ blogs }: { blogs: BlogEntry[] }) => {
   return (
-    <div className="h-screen bg-gray-700 px-10 md:px-30 lg:px-60 py-15 text-gray-100">
+    <div className="bg-gray-700 px-10 md:px-30 lg:px-60 py-15 text-gray-100">
       <h1 className="text-3xl font-bold">Blogs</h1>
       <ul className="flex flex-col mt-3 divide-y divide-gray-500">
         {blogs.map((blog) => (
