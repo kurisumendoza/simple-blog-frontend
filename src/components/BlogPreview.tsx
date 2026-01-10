@@ -1,6 +1,6 @@
 import type { BlogEntry } from '@/types/BlogEntry';
 
-const BlogPost = ({ blog }: { blog: BlogEntry }) => {
+const BlogPreview = ({ blog }: { blog: BlogEntry }) => {
   return (
     <li className="py-4">
       <h2 className="text-xl font-semibold">{blog.title}</h2>
@@ -29,4 +29,4 @@ const BlogPost = ({ blog }: { blog: BlogEntry }) => {
   );
 };
 
-export default BlogPost;
+export default BlogPreview;
