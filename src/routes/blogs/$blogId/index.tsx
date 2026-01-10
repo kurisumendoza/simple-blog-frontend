@@ -1,26 +1,11 @@
-import { supabase } from '@/lib/supabase-client';
+import { fetchBlogBySlug } from '@/lib/blogs';
 import type { BlogEntry } from '@/types/BlogEntry';
 import { createFileRoute, Link } from '@tanstack/react-router';
-
-const fetchBlog = async (slug: string) => {
-  const { error, data } = await supabase
-    .from('blogs')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-
-  if (error) {
-    console.error('Error loading blog: ', error.message);
-    return;
-  }
-
-  return data;
-};
 
 export const Route = createFileRoute('/blogs/$blogId/')({
   component: BlogPage,
   loader: async ({ params }) => {
-    return fetchBlog(params.blogId);
+    return fetchBlogBySlug(params.blogId);
   },
 });
 
