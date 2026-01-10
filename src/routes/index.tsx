@@ -1,7 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { supabase } from '@/lib/supabase-client';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BlogList from '@/components/BlogList';
+import Pagination from '@/components/Pagination';
+
+const BLOGS_PER_PAGE = 5;
 
 const fetchBlogs = async () => {
   const { error, data, count } = await supabase
@@ -15,7 +18,7 @@ const fetchBlogs = async () => {
     return;
   }
 
-  const totalPages = count ? Math.ceil(count / 5) : 0;
+  const totalPages = count ? Math.ceil(count / BLOGS_PER_PAGE) : 0;
 
   return { data, count, totalPages };
 };
@@ -42,25 +45,7 @@ function App() {
     <>
       <BlogList blogs={blogs} />
 
-      {count > 5 && (
-        <div className="flex justify-center items-center gap-5 pt-8">
-          <button className="opacity-50 border rounded py-1 px-2" disabled>
-            Back
-          </button>
-          <div className="flex gap-2">
-            <span className="font-bold">1</span>
-            <span>of</span>
-            <span className="font-bold">{totalPages}</span>
-          </div>
-          <Link
-            to="/page/$pageId"
-            params={{ pageId: '2' }}
-            className="border rounded py-1 px-2 cursor-pointer"
-          >
-            Next
-          </Link>
-        </div>
-      )}
+      {count > 5 && <Pagination totalPages={totalPages} currentPage={1} />}
     </>
   );
 }
