@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { supabase } from '@/lib/supabase-client';
-import Navbar from '@/components/Navbar';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BlogList from '@/components/BlogList';
 
@@ -28,10 +27,5 @@ export const Route = createFileRoute('/')({
 function App() {
   const blogs: BlogEntry[] = Route.useLoaderData();
 
-  return (
-    <>
-      <Navbar />
-      <BlogList blogs={blogs} />
-    </>
-  );
+  return <BlogList blogs={blogs} />;
 }

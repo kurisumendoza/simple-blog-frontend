@@ -1,10 +1,16 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import Navbar from '@/components/Navbar';
 
 export const Route = createRootRoute({
-  component: () => (
+  component: RootLayout,
+});
+
+function RootLayout() {
+  return (
     <>
+      <Navbar />
       <Outlet />
       <TanStackDevtools
         config={{
@@ -18,5 +24,5 @@ export const Route = createRootRoute({
         ]}
       />
     </>
-  ),
-})
+  );
+}
