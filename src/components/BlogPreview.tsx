@@ -1,4 +1,5 @@
 import type { BlogEntry } from '@/types/BlogEntry';
+import { Link } from '@tanstack/react-router';
 
 const BlogPreview = ({ blog }: { blog: BlogEntry }) => {
   return (
@@ -22,9 +23,13 @@ const BlogPreview = ({ blog }: { blog: BlogEntry }) => {
       <p className="my-2">
         {blog.body.length > 100 ? `${blog.body.slice(0, 120)}...` : blog.body}
       </p>
-      <button className="text-blue-400 font-semibold cursor-pointer hover:font-bold">
+      <Link
+        to="/blogs/$blogId"
+        params={{ blogId: blog.slug }}
+        className="text-blue-400 font-semibold cursor-pointer hover:font-bold"
+      >
         Read More →
-      </button>
+      </Link>
     </li>
   );
 };
