@@ -18,9 +18,10 @@ export const registerUser = async ({
   });
 
   if (error) {
-    console.error('Error signing up: ', error.message);
-    return;
+    return { success: false, error: error.message };
   }
+
+  return { success: true };
 };
 
 export const loginUser = async ({

@@ -12,10 +12,15 @@ function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    registerUser({ email, password, user });
+    const result = await registerUser({ email, password, user });
+
+    if (!result.success) {
+      console.error('Failed to register: ', result.error);
+      return;
+    }
   };
 
   return (
