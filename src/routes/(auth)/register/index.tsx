@@ -1,11 +1,20 @@
 import BackButton from '@/components/BackButton';
-import { registerUser } from '@/lib/auth';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { fetchSession, registerUser } from '@/lib/auth';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/(auth)/register/')({
   component: RegisterPage,
+  loader: async () => {
+    const isLoggedIn = await fetchSession();
+
+    if (isLoggedIn) {
+      throw redirect({ to: '/' });
+    }
+
+    return null;
+  },
 });
 
 function RegisterPage() {

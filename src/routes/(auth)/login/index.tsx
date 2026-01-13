@@ -1,4 +1,9 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from '@tanstack/react-router';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchSession, loginUser } from '@/lib/auth';
@@ -8,6 +13,15 @@ import { setUser } from '@/store/authSlice';
 
 export const Route = createFileRoute('/(auth)/login/')({
   component: LoginPage,
+  loader: async () => {
+    const isLoggedIn = await fetchSession();
+
+    if (isLoggedIn) {
+      throw redirect({ to: '/' });
+    }
+
+    return null;
+  },
 });
 
 function LoginPage() {
