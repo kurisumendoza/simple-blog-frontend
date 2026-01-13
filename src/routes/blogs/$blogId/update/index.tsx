@@ -1,9 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
 import { fetchBlogBySlug } from '@/lib/blogs';
-import type { RootState } from '@/store/store';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
@@ -22,9 +20,6 @@ function UpdateBlogPage() {
   const [body, setBody] = useState(blog.body);
 
   const navigate = useNavigate();
-  const currentUserAuthId = useSelector(
-    (state: RootState) => state.auth.authId
-  );
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,7 +32,7 @@ function UpdateBlogPage() {
     const { error } = await supabase
       .from('blogs')
       .update(updatedBlog)
-      .eq('user_id', currentUserAuthId);
+      .eq('id', blog.id);
 
     if (error) {
       toast.error(`Failed to update blog: ${error.message}`);

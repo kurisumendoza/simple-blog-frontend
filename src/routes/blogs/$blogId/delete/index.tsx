@@ -29,10 +29,7 @@ function DeletePage() {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    const { error } = await supabase
-      .from('blogs')
-      .delete()
-      .eq('slug', blog.slug);
+    const { error } = await supabase.from('blogs').delete().eq('id', blog.id);
 
     if (error) {
       toast.error(`Failed to delete blog: ${error.message}`);
