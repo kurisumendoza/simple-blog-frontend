@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSession, logoutUser } from '@/lib/auth';
 import { setUser } from '@/store/authSlice';
@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     const result = await logoutUser();
@@ -18,6 +19,9 @@ const Header = () => {
     }
 
     dispatch(setUser(null));
+
+    navigate({ to: '/' });
+
     toast.success('You are now logged out.');
   };
 
