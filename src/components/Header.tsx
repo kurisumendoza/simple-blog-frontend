@@ -1,10 +1,24 @@
-import { logoutUser } from '@/lib/auth';
-import type { RootState } from '@/store/store';
 import { Link } from '@tanstack/react-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '@/lib/auth';
+import { setUser } from '@/store/authSlice';
+import type { RootState } from '@/store/store';
 
 const Header = ({ user = 'Guest' }: { user?: string }) => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
+
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    const result = await logoutUser();
+
+    if (!result.success) {
+      console.error('Failed to logout: ', result.error);
+      return;
+    }
+
+    dispatch(setUser(null));
+  };
 
   return (
     <div className="flex justify-between fixed top-0 left-0 w-full bg-gray-500 py-2 px-10 md:px-30 lg:px-60 text-white shadow-lg">
@@ -15,7 +29,7 @@ const Header = ({ user = 'Guest' }: { user?: string }) => {
         {currentUser && (
           <>
             <li>
-              <button onClick={logoutUser} className="cursor-pointer">
+              <button onClick={handleLogout} className="cursor-pointer">
                 Logout
               </button>
             </li>
