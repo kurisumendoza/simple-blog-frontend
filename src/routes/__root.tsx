@@ -1,7 +1,7 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import Navbar from '@/components/Navbar';
+import Header from '@/components/Header';
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -10,7 +10,7 @@ export const Route = createRootRoute({
 function RootLayout() {
   return (
     <div className="min-h-screen bg-gray-400 px-10 md:px-30 lg:px-60 py-15 text-gray-100">
-      <Navbar />
+      <Header />
       <main className="bg-gray-700 rounded-md py-6 px-8 shadow-lg">
         <Outlet />
       </main>
