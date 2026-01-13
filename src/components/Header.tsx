@@ -14,7 +14,7 @@ const Header = () => {
     const result = await logoutUser();
 
     if (!result.success) {
-      console.error('Failed to logout: ', result.error);
+      toast.error(`Failed to logout: ${result.error}`);
       return;
     }
 

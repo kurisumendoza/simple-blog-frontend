@@ -37,7 +37,7 @@ function LoginPage() {
     const result = await loginUser({ email, password });
 
     if (!result.success) {
-      console.error('Failed to login: ', result.error);
+      toast.error(`Failed to login: ${result.error}`);
       return;
     }
 
