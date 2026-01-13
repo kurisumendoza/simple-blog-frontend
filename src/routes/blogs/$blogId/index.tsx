@@ -1,6 +1,7 @@
+import BackButton from '@/components/BackButton';
 import { fetchBlogBySlug } from '@/lib/blogs';
 import type { BlogEntry } from '@/types/BlogEntry';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/blogs/$blogId/')({
   component: BlogPage,
@@ -14,12 +15,7 @@ function BlogPage() {
 
   return (
     <div>
-      <Link
-        to="/"
-        className="text-blue-400 font-semibold cursor-pointer hover:font-bold"
-      >
-        ← Back to Home
-      </Link>
+      <BackButton />
       <h2 className="text-2xl font-bold mt-3">{blog.title}</h2>
       <div className="flex justify-between text-sm">
         <div>
