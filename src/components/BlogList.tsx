@@ -9,6 +9,7 @@ const BlogList = ({ blogs }: { blogs: BlogEntry[] }) => {
         {blogs.map((blog) => (
           <BlogPreview key={blog.id} blog={blog} />
         ))}
+        {blogs.length === 0 && <li>No blog yet</li>}
       </ul>
     </>
   );
