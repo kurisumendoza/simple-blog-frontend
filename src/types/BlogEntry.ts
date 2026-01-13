@@ -5,4 +5,5 @@ export type BlogEntry = {
   title: string;
   slug: string;
   body: string;
+  user_id: string;
 };

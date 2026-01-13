@@ -16,6 +16,7 @@ import { Route as BlogsBlogIdIndexRouteImport } from './routes/blogs/$blogId/ind
 import { Route as authRegisterIndexRouteImport } from './routes/(auth)/register/index'
 import { Route as authLoginIndexRouteImport } from './routes/(auth)/login/index'
 import { Route as BlogsBlogIdUpdateIndexRouteImport } from './routes/blogs/$blogId/update/index'
+import { Route as BlogsBlogIdDeleteIndexRouteImport } from './routes/blogs/$blogId/delete/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const BlogsBlogIdUpdateIndexRoute = BlogsBlogIdUpdateIndexRouteImport.update({
   path: '/blogs/$blogId/update/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogsBlogIdDeleteIndexRoute = BlogsBlogIdDeleteIndexRouteImport.update({
+  id: '/blogs/$blogId/delete/',
+  path: '/blogs/$blogId/delete/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/blogs/$blogId': typeof BlogsBlogIdIndexRoute
   '/blogs/create': typeof BlogsCreateIndexRoute
   '/page/$pageId': typeof PagePageIdIndexRoute
+  '/blogs/$blogId/delete': typeof BlogsBlogIdDeleteIndexRoute
   '/blogs/$blogId/update': typeof BlogsBlogIdUpdateIndexRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/blogs/$blogId': typeof BlogsBlogIdIndexRoute
   '/blogs/create': typeof BlogsCreateIndexRoute
   '/page/$pageId': typeof PagePageIdIndexRoute
+  '/blogs/$blogId/delete': typeof BlogsBlogIdDeleteIndexRoute
   '/blogs/$blogId/update': typeof BlogsBlogIdUpdateIndexRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/blogs/$blogId/': typeof BlogsBlogIdIndexRoute
   '/blogs/create/': typeof BlogsCreateIndexRoute
   '/page/$pageId/': typeof PagePageIdIndexRoute
+  '/blogs/$blogId/delete/': typeof BlogsBlogIdDeleteIndexRoute
   '/blogs/$blogId/update/': typeof BlogsBlogIdUpdateIndexRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/blogs/$blogId'
     | '/blogs/create'
     | '/page/$pageId'
+    | '/blogs/$blogId/delete'
     | '/blogs/$blogId/update'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/blogs/$blogId'
     | '/blogs/create'
     | '/page/$pageId'
+    | '/blogs/$blogId/delete'
     | '/blogs/$blogId/update'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/blogs/$blogId/'
     | '/blogs/create/'
     | '/page/$pageId/'
+    | '/blogs/$blogId/delete/'
     | '/blogs/$blogId/update/'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   BlogsBlogIdIndexRoute: typeof BlogsBlogIdIndexRoute
   BlogsCreateIndexRoute: typeof BlogsCreateIndexRoute
   PagePageIdIndexRoute: typeof PagePageIdIndexRoute
+  BlogsBlogIdDeleteIndexRoute: typeof BlogsBlogIdDeleteIndexRoute
   BlogsBlogIdUpdateIndexRoute: typeof BlogsBlogIdUpdateIndexRoute
 }
 
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogsBlogIdUpdateIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blogs/$blogId/delete/': {
+      id: '/blogs/$blogId/delete/'
+      path: '/blogs/$blogId/delete'
+      fullPath: '/blogs/$blogId/delete'
+      preLoaderRoute: typeof BlogsBlogIdDeleteIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogsBlogIdIndexRoute: BlogsBlogIdIndexRoute,
   BlogsCreateIndexRoute: BlogsCreateIndexRoute,
   PagePageIdIndexRoute: PagePageIdIndexRoute,
+  BlogsBlogIdDeleteIndexRoute: BlogsBlogIdDeleteIndexRoute,
   BlogsBlogIdUpdateIndexRoute: BlogsBlogIdUpdateIndexRoute,
 }
 export const routeTree = rootRouteImport

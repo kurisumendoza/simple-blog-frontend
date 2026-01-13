@@ -15,7 +15,9 @@ export const Route = createFileRoute('/blogs/$blogId/')({
 function BlogPage() {
   const blog: BlogEntry = Route.useLoaderData();
 
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const currentUserAuthId = useSelector(
+    (state: RootState) => state.auth.authId
+  );
 
   return (
     <div>
@@ -37,14 +39,21 @@ function BlogPage() {
         </span>
       </div>
       <p className="my-5">{blog.body}</p>
-      {currentUser && (
-        <div className="flex mt-5">
-          <Link to="/blogs/$blogId/update" params={{ blogId: blog.slug }}>
-            <button className="bg-blue-400 mx-auto px-3 py-2 font-semibold rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition">
-              Update
-            </button>
-          </Link>
-        </div>
+      {currentUserAuthId === blog.user_id && (
+        <>
+          <div className="flex gap-3 mt-5">
+            <Link to="/blogs/$blogId/update" params={{ blogId: blog.slug }}>
+              <button className="bg-blue-400 mx-auto px-3 py-2 w-25 font-semibold rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition">
+                Update
+              </button>
+            </Link>
+            <Link to="/blogs/$blogId/delete" params={{ blogId: blog.slug }}>
+              <button className="bg-red-400 mx-auto px-3 py-2 w-25 font-semibold rounded-md text-gray-800 cursor-pointer hover:bg-red-800 hover:text-gray-100 transition">
+                Delete
+              </button>
+            </Link>
+          </div>
+        </>
       )}
     </div>
   );
