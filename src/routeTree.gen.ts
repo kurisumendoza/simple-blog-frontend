@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PagePageIdIndexRouteImport } from './routes/page/$pageId/index'
 import { Route as BlogsBlogIdIndexRouteImport } from './routes/blogs/$blogId/index'
+import { Route as authRegisterIndexRouteImport } from './routes/(auth)/register/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +29,47 @@ const BlogsBlogIdIndexRoute = BlogsBlogIdIndexRouteImport.update({
   path: '/blogs/$blogId/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authRegisterIndexRoute = authRegisterIndexRouteImport.update({
+  id: '/(auth)/register/',
+  path: '/register/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/register': typeof authRegisterIndexRoute
   '/blogs/$blogId': typeof BlogsBlogIdIndexRoute
   '/page/$pageId': typeof PagePageIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/register': typeof authRegisterIndexRoute
   '/blogs/$blogId': typeof BlogsBlogIdIndexRoute
   '/page/$pageId': typeof PagePageIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/(auth)/register/': typeof authRegisterIndexRoute
   '/blogs/$blogId/': typeof BlogsBlogIdIndexRoute
   '/page/$pageId/': typeof PagePageIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blogs/$blogId' | '/page/$pageId'
+  fullPaths: '/' | '/register' | '/blogs/$blogId' | '/page/$pageId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blogs/$blogId' | '/page/$pageId'
-  id: '__root__' | '/' | '/blogs/$blogId/' | '/page/$pageId/'
+  to: '/' | '/register' | '/blogs/$blogId' | '/page/$pageId'
+  id:
+    | '__root__'
+    | '/'
+    | '/(auth)/register/'
+    | '/blogs/$blogId/'
+    | '/page/$pageId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  authRegisterIndexRoute: typeof authRegisterIndexRoute
   BlogsBlogIdIndexRoute: typeof BlogsBlogIdIndexRoute
   PagePageIdIndexRoute: typeof PagePageIdIndexRoute
 }
@@ -82,11 +97,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogsBlogIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/register/': {
+      id: '/(auth)/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof authRegisterIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  authRegisterIndexRoute: authRegisterIndexRoute,
   BlogsBlogIdIndexRoute: BlogsBlogIdIndexRoute,
   PagePageIdIndexRoute: PagePageIdIndexRoute,
 }
