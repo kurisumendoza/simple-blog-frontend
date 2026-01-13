@@ -20,7 +20,7 @@ function BlogPage() {
   );
 
   return (
-    <div>
+    <>
       <BackButton />
       <h2 className="text-2xl font-bold mt-3">{blog.title}</h2>
       <div className="flex justify-between text-sm">
@@ -55,6 +55,6 @@ function BlogPage() {
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }
