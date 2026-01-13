@@ -42,7 +42,7 @@ function LoginPage() {
     }
 
     const userData = await fetchSession();
-    dispatch(setUser(userData?.user ?? null));
+    dispatch(setUser(userData ?? null));
 
     setEmail('');
     setPassword('');

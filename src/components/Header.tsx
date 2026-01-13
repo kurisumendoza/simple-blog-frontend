@@ -28,7 +28,7 @@ const Header = () => {
   useEffect(() => {
     const syncSession = async () => {
       const sessionData = await fetchSession();
-      dispatch(setUser(sessionData?.user ?? null));
+      dispatch(setUser(sessionData ?? null));
     };
 
     syncSession();
