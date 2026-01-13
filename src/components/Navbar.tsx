@@ -10,7 +10,9 @@ const Navbar = ({ user = 'Guest' }: { user?: string }) => {
         <li>
           <Link to="/register">Register</Link>
         </li>
-        <li>Login</li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
       </ul>
     </div>
   );
