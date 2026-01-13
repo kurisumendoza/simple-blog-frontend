@@ -7,7 +7,7 @@ export const Route = createFileRoute('/(auth)/register/')({
 });
 
 function RegisterPage() {
-  const [name, setName] = useState('');
+  const [user, setUser] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,9 +18,9 @@ function RegisterPage() {
       <form action="" className="space-y-4">
         <input
           type="text"
-          value={name}
-          placeholder="Name"
-          onChange={(e) => setName(e.target.value)}
+          value={user}
+          placeholder="Username"
+          onChange={(e) => setUser(e.target.value)}
           className="border w-full rounded-md px-3 py-1"
           autoComplete="off"
           required
