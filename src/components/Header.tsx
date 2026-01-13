@@ -8,6 +8,8 @@ import toast from 'react-hot-toast';
 const Header = ({ user = 'Guest' }: { user?: string }) => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
+  console.log(currentUser);
+
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
