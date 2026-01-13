@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '@/lib/auth';
 import { setUser } from '@/store/authSlice';
 import type { RootState } from '@/store/store';
+import toast from 'react-hot-toast';
 
 const Header = ({ user = 'Guest' }: { user?: string }) => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
@@ -18,6 +19,7 @@ const Header = ({ user = 'Guest' }: { user?: string }) => {
     }
 
     dispatch(setUser(null));
+    toast.success('You are now logged out.');
   };
 
   return (

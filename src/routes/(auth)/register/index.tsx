@@ -2,6 +2,7 @@ import BackButton from '@/components/BackButton';
 import { registerUser } from '@/lib/auth';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/(auth)/register/')({
   component: RegisterPage,
@@ -18,9 +19,15 @@ function RegisterPage() {
     const result = await registerUser({ email, password, user });
 
     if (!result.success) {
-      console.error('Failed to register: ', result.error);
+      toast.error(`Failed to register: ${result.error}`);
       return;
     }
+
+    setUser('');
+    setEmail('');
+    setPassword('');
+
+    toast.success('Registered successfully! You can now log in.');
   };
 
   return (

@@ -1,7 +1,8 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { loginUser } from '@/lib/auth';
 import BackButton from '@/components/BackButton';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/(auth)/login/')({
   component: LoginPage,
@@ -23,6 +24,10 @@ function LoginPage() {
       return;
     }
 
+    setEmail('');
+    setPassword('');
+
+    toast.success('Successfully logged in!');
     navigate({ to: '/' });
   };
 
@@ -55,7 +60,7 @@ function LoginPage() {
         <div>
           <span>Don't have an account yet?</span>
           <span className="font-semibold text-blue-400 ml-2 cursor-pointer hover:text-blue-100">
-            Register
+            <Link to="/register">Register</Link>
           </span>
         </div>
       </form>
