@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { loginUser } from '@/lib/auth';
-import BackButton from '@/components/BackButton';
+import { useDispatch } from 'react-redux';
+import { fetchSession, loginUser } from '@/lib/auth';
 import toast from 'react-hot-toast';
+import BackButton from '@/components/BackButton';
+import { setUser } from '@/store/authSlice';
 
 export const Route = createFileRoute('/(auth)/login/')({
   component: LoginPage,
@@ -14,6 +16,8 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -23,6 +27,9 @@ function LoginPage() {
       console.error('Failed to login: ', result.error);
       return;
     }
+
+    const userData = await fetchSession();
+    dispatch(setUser(userData?.user ?? null));
 
     setEmail('');
     setPassword('');
