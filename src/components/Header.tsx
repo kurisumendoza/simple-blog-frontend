@@ -37,9 +37,11 @@ const Header = () => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
   return (
-    <div className="flex justify-between fixed top-0 left-0 w-full bg-gray-500 py-2 px-10 md:px-30 lg:px-60 text-white shadow-lg">
+    <div className="flex justify-between fixed top-0 left-0 w-full bg-gray-500 py-2 px-[10%] sm:px-[15%] md:px-[20%] lg:px-[25%] text-white shadow-lg">
       <div>
-        <p>Hi, {currentUser || 'Guest'}</p>
+        <p>
+          Hi, <span className="font-bold">{currentUser || 'Guest'}</span>
+        </p>
       </div>
       <ul className="flex justify-between gap-5">
         {currentUser && (

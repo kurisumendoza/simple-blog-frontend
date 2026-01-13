@@ -10,7 +10,7 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   return (
-    <div className="min-h-screen bg-gray-400 px-10 md:px-30 lg:px-60 py-15 text-gray-100">
+    <div className="min-h-screen bg-gray-400 px-[10%] sm:px-[15%] md:px-[20%] lg:px-[25%] py-15 text-gray-100">
       <Toaster position="top-right" reverseOrder={false} />
       <Header />
       <main className="bg-gray-700 rounded-md py-6 px-8 shadow-lg">
