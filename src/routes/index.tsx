@@ -36,7 +36,7 @@ function App() {
 
   const { data: blogs, count, totalPages } = blogsData;
 
-  const { user } = userData;
+  const user = userData ? userData.user : null;
 
   useEffect(() => {
     dispatch(setUser(user));

@@ -45,6 +45,10 @@ export const loginUser = async ({
   console.log('successful login');
 };
 
+export const logoutUser = async () => {
+  await supabase.auth.signOut();
+};
+
 export const fetchSession = async () => {
   const session = await supabase.auth.getSession();
   const userData = session.data.session?.user.user_metadata;
