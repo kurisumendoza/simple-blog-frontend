@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
@@ -21,6 +21,7 @@ function UpdateBlogPage() {
   const [title, setTitle] = useState(blog.title);
   const [body, setBody] = useState(blog.body);
 
+  const navigate = useNavigate();
   const currentUserAuthId = useSelector(
     (state: RootState) => state.auth.authId
   );
@@ -44,6 +45,7 @@ function UpdateBlogPage() {
     }
 
     toast.success('Blog successfully updated!');
+    navigate({ to: `/blogs/${blog.slug}` });
   };
 
   return (

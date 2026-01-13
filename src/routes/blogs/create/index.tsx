@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
@@ -28,6 +28,7 @@ function CreateBlogPage() {
   const currentUserAuthId = useSelector(
     (state: RootState) => state.auth.authId
   );
+  const navigate = useNavigate();
 
   const generateUniqueSlug = (string: string) => {
     const textString = string.trim().toLowerCase().split(' ').join('-');
@@ -58,6 +59,7 @@ function CreateBlogPage() {
     setBody('');
 
     toast.success('Blog successfully created!');
+    navigate({ to: `/blogs/${newBlog.slug}` });
   };
 
   return (
