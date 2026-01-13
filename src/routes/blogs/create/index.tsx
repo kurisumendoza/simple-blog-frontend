@@ -1,13 +1,23 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
+import { fetchSession } from '@/lib/auth';
+import type { RootState } from '@/store/store';
 import toast from 'react-hot-toast';
 import BackButton from '@/components/BackButton';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@/store/store';
 
 export const Route = createFileRoute('/blogs/create/')({
   component: CreateBlogPage,
+  loader: async () => {
+    const isLoggedIn = await fetchSession();
+
+    if (!isLoggedIn) {
+      throw redirect({ to: '/' });
+    }
+
+    return null;
+  },
 });
 
 function CreateBlogPage() {
