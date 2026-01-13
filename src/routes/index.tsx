@@ -1,26 +1,46 @@
 import { createFileRoute } from '@tanstack/react-router';
 import type { BlogEntry } from '@/types/BlogEntry';
+import { fetchBlogs } from '@/lib/blogs';
+import { fetchSession } from '@/lib/auth';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/store/authSlice';
 import BlogList from '@/components/BlogList';
 import Pagination from '@/components/Pagination';
-import { fetchBlogs } from '@/lib/blogs';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/')({
   component: App,
   loader: async () => {
-    return fetchBlogs(1);
+    const blogsData = await fetchBlogs(1);
+    const userData = await fetchSession();
+
+    return { blogsData, userData };
   },
 });
 
+type BlogsData = {
+  data: BlogEntry[];
+  count: number;
+  totalPages: number;
+};
+
+type UserData = {
+  user: { user: string | null };
+};
+
 function App() {
-  const {
-    data: blogs,
-    count,
-    totalPages,
-  }: {
-    data: BlogEntry[];
-    count: number;
-    totalPages: number;
-  } = Route.useLoaderData();
+  const dispatch = useDispatch();
+
+  const { blogsData, userData }: { blogsData: BlogsData; userData: UserData } =
+    Route.useLoaderData();
+
+  const { data: blogs, count, totalPages } = blogsData;
+
+  const { user } = userData;
+
+  useEffect(() => {
+    dispatch(setUser(user));
+  }, [user]);
 
   return (
     <>
