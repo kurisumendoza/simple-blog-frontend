@@ -25,6 +25,9 @@ function CreateBlogPage() {
   const [body, setBody] = useState('');
 
   const currentUser = useSelector((state: RootState) => state.auth.user);
+  const currentUserAuthId = useSelector(
+    (state: RootState) => state.auth.authId
+  );
 
   const generateUniqueSlug = (string: string) => {
     const textString = string.trim().toLowerCase().split(' ').join('-');
@@ -41,12 +44,14 @@ function CreateBlogPage() {
       slug: generateUniqueSlug(title),
       body: body.trim(),
       user: currentUser,
+      user_id: currentUserAuthId,
     };
 
     const { error } = await supabase.from('blogs').insert(newBlog).single();
 
     if (error) {
       toast.error(`Failed to create a blog: ${error.message}`);
+      return;
     }
 
     setTitle('');
