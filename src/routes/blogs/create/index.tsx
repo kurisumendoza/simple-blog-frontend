@@ -16,12 +16,19 @@ function CreateBlogPage() {
 
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
+  const generateUniqueSlug = (string: string) => {
+    const textString = string.trim().toLowerCase().split(' ').join('-');
+    const uuid = crypto.randomUUID().slice(0, 6);
+
+    return `${textString}-${uuid}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newBlog = {
       title: title.trim(),
-      slug: title.trim().toLowerCase().split(' ').join('-'),
+      slug: generateUniqueSlug(title),
       body: body.trim(),
       user: currentUser,
     };
