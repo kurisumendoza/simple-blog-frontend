@@ -3,9 +3,11 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import Header from '@/components/Header';
 import { Toaster } from 'react-hot-toast';
+import BackButton from '@/components/BackButton';
 
 export const Route = createRootRoute({
   component: RootLayout,
+  notFoundComponent: NotFound,
 });
 
 function RootLayout() {
@@ -28,5 +30,15 @@ function RootLayout() {
         ]}
       />
     </div>
+  );
+}
+
+function NotFound() {
+  return (
+    <>
+      <BackButton />
+      <h1 className="text-3xl font-bold my-3">404</h1>
+      <p>Page Not Found!</p>
+    </>
   );
 }
