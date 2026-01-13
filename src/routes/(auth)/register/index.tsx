@@ -1,4 +1,5 @@
 import BackButton from '@/components/BackButton';
+import { registerUser } from '@/lib/auth';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -11,11 +12,17 @@ function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    registerUser({ email, password, user });
+  };
+
   return (
     <>
       <BackButton />
       <h1 className="text-3xl font-bold my-3">Register</h1>
-      <form action="" className="space-y-4">
+      <form onSubmit={handleRegister} className="space-y-4">
         <input
           type="text"
           value={user}
@@ -35,7 +42,7 @@ function RegisterPage() {
           required
         />
         <input
-          type="text"
+          type="password"
           value={password}
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
