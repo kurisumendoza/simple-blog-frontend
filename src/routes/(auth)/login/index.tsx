@@ -1,4 +1,5 @@
 import BackButton from '@/components/BackButton';
+import { loginUser } from '@/lib/auth';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -10,11 +11,17 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    loginUser({ email, password });
+  };
+
   return (
     <>
       <BackButton />
       <h1 className="text-3xl font-bold my-3">Login</h1>
-      <form action="" className="space-y-4">
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           value={email}

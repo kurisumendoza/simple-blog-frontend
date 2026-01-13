@@ -19,7 +19,28 @@ export const registerUser = async ({
 
   if (error) {
     console.error('Error signing up: ', error.message);
+    return;
   }
 
   console.log(data);
+};
+
+export const loginUser = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.error('Error signing in: ', error.message);
+    return;
+  }
+
+  console.log('successful login');
 };
