@@ -31,6 +31,9 @@ const Header = ({ user = 'Guest' }: { user?: string }) => {
         {currentUser && (
           <>
             <li>
+              <Link to="/blogs/create">Create</Link>
+            </li>
+            <li>
               <button onClick={handleLogout} className="cursor-pointer">
                 Logout
               </button>
