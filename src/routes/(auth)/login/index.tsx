@@ -1,7 +1,7 @@
-import BackButton from '@/components/BackButton';
-import { loginUser } from '@/lib/auth';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
+import { loginUser } from '@/lib/auth';
+import BackButton from '@/components/BackButton';
 
 export const Route = createFileRoute('/(auth)/login/')({
   component: LoginPage,
@@ -11,10 +11,19 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    loginUser({ email, password });
+    const result = await loginUser({ email, password });
+
+    if (!result.success) {
+      console.error('Failed to login: ', result.error);
+      return;
+    }
+
+    navigate({ to: '/' });
   };
 
   return (

@@ -9,7 +9,7 @@ export const registerUser = async ({
   password: string;
   user: string;
 }) => {
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -21,8 +21,6 @@ export const registerUser = async ({
     console.error('Error signing up: ', error.message);
     return;
   }
-
-  console.log(data);
 };
 
 export const loginUser = async ({
@@ -38,11 +36,10 @@ export const loginUser = async ({
   });
 
   if (error) {
-    console.error('Error signing in: ', error.message);
-    return;
+    return { success: false, error: error.message };
   }
 
-  console.log('successful login');
+  return { success: true };
 };
 
 export const logoutUser = async () => {
