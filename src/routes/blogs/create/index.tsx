@@ -31,6 +31,11 @@ function CreateBlogPage() {
     if (error) {
       toast.error(`Failed to create a blog: ${error.message}`);
     }
+
+    setTitle('');
+    setBody('');
+
+    toast.success('Blog successfully created!');
   };
 
   return (
