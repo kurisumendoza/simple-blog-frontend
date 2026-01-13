@@ -1,10 +1,10 @@
 import { Link, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSession, logoutUser } from '@/lib/auth';
 import { setUser } from '@/store/authSlice';
 import type { RootState } from '@/store/store';
 import toast from 'react-hot-toast';
-import { useEffect } from 'react';
 
 const Header = () => {
   const dispatch = useDispatch();

@@ -54,8 +54,12 @@ export const logoutUser = async () => {
 };
 
 export const fetchSession = async () => {
-  const session = await supabase.auth.getSession();
-  const userData = session.data.session?.user.user_metadata;
+  const { data } = await supabase.auth.getSession();
 
-  return userData ?? null;
+  if (!data.session) return null;
+
+  const user: string | null = data.session?.user.user_metadata.user;
+  const authId: string | undefined = data.session?.user.id;
+
+  return { user, authId };
 };

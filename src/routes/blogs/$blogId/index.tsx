@@ -1,7 +1,9 @@
 import BackButton from '@/components/BackButton';
 import { fetchBlogBySlug } from '@/lib/blogs';
+import type { RootState } from '@/store/store';
 import type { BlogEntry } from '@/types/BlogEntry';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useSelector } from 'react-redux';
 
 export const Route = createFileRoute('/blogs/$blogId/')({
   component: BlogPage,
@@ -12,6 +14,8 @@ export const Route = createFileRoute('/blogs/$blogId/')({
 
 function BlogPage() {
   const blog: BlogEntry = Route.useLoaderData();
+
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   return (
     <div>
@@ -33,6 +37,15 @@ function BlogPage() {
         </span>
       </div>
       <p className="my-5">{blog.body}</p>
+      {currentUser && (
+        <div className="flex mt-5">
+          <Link to="/blogs/$blogId/update" params={{ blogId: blog.slug }}>
+            <button className="bg-blue-400 mx-auto px-3 py-2 font-semibold rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition">
+              Update
+            </button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
