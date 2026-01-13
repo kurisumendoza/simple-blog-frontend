@@ -1,7 +1,14 @@
-import BackButton from '@/components/BackButton';
-import { fetchSession, registerUser } from '@/lib/auth';
-import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from '@tanstack/react-router';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchSession, registerUser } from '@/lib/auth';
+import { setUser } from '@/store/authSlice';
+import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/(auth)/register/')({
@@ -18,25 +25,32 @@ export const Route = createFileRoute('/(auth)/register/')({
 });
 
 function RegisterPage() {
-  const [user, setUser] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const result = await registerUser({ email, password, user });
+    const result = await registerUser({ email, password, user: username });
 
     if (!result.success) {
       toast.error(`Failed to register: ${result.error}`);
       return;
     }
 
-    setUser('');
+    const userData = await fetchSession();
+    dispatch(setUser(userData?.user ?? null));
+
+    setUsername('');
     setEmail('');
     setPassword('');
 
-    toast.success('Registered successfully! You can now log in.');
+    toast.success('Registered successfully!');
+    navigate({ to: '/' });
   };
 
   return (
@@ -46,9 +60,9 @@ function RegisterPage() {
       <form onSubmit={handleRegister} className="space-y-4">
         <input
           type="text"
-          value={user}
+          value={username}
           placeholder="Username"
-          onChange={(e) => setUser(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           className="border w-full rounded-md px-3 py-1"
           autoComplete="off"
           required

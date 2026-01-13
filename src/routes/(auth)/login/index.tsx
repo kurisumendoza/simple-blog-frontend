@@ -29,7 +29,6 @@ function LoginPage() {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
