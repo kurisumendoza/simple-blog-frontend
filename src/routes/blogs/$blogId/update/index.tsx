@@ -59,7 +59,7 @@ function UpdateBlogPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > MAX_FILE_SIZE) {
-      toast.error('Image must be smaller than 2MB');
+      toast.error('Image must be smaller than 5MB');
       return;
     }
     setNewImage(file);

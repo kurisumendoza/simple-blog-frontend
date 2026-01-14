@@ -46,7 +46,7 @@ function CreateBlogPage() {
     if (!file) return;
 
     if (file.size > MAX_FILE_SIZE) {
-      toast.error('Image must be smaller than 2MB');
+      toast.error('Image must be smaller than 5MB');
       return;
     }
 
@@ -151,7 +151,7 @@ function CreateBlogPage() {
             <img
               src={URL.createObjectURL(image)}
               alt="Preview"
-              className="mt-1 h-33 rounded-md object-cover"
+              className="mt-1 h-20 rounded-md object-cover"
             />
             <button
               type="button"
