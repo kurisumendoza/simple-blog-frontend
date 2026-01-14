@@ -1,8 +1,10 @@
 import BackButton from '@/components/BackButton';
 import { fetchBlogBySlug } from '@/lib/blogs';
+import { supabase } from '@/lib/supabase-client';
 import type { RootState } from '@/store/store';
 import type { BlogEntry } from '@/types/BlogEntry';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export const Route = createFileRoute('/blogs/$blogId/')({
@@ -13,11 +15,23 @@ export const Route = createFileRoute('/blogs/$blogId/')({
 });
 
 function BlogPage() {
+  const [image, setImage] = useState<string | null>(null);
+
   const blog: BlogEntry = Route.useLoaderData();
 
   const currentUserAuthId = useSelector(
     (state: RootState) => state.auth.authId
   );
+
+  useEffect(() => {
+    if (!blog?.image_path) return;
+
+    const { data } = supabase.storage
+      .from('blog-images')
+      .getPublicUrl(blog.image_path);
+
+    setImage(data.publicUrl);
+  }, [blog?.image_path]);
 
   return (
     <>
@@ -38,6 +52,17 @@ function BlogPage() {
           })}
         </span>
       </div>
+
+      {image && (
+        <div className="mt-5">
+          <img
+            src={image}
+            alt=""
+            className="max-h-100 w-full object-cover rounded-md shadow"
+          />
+        </div>
+      )}
+
       <p className="my-5">{blog.body}</p>
       {currentUserAuthId === blog.user_id && (
         <>

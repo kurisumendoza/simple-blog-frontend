@@ -177,7 +177,7 @@ function UpdateBlogPage() {
                     : undefined
               }
               alt="Preview"
-              className="mt-1 h-33 rounded-md object-cover"
+              className="mt-1 h-20 rounded-md object-cover"
             />
             <button
               type="button"
