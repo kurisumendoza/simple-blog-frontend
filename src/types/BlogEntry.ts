@@ -6,4 +6,5 @@ export type BlogEntry = {
   slug: string;
   body: string;
   user_id: string;
+  image_path: string;
 };
