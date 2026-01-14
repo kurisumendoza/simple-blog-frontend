@@ -54,43 +54,55 @@ function UpdateBlogPage() {
     setImage(null);
   };
 
-  // TODO
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // if (image) handleDeleteImage();
-    // const file = e.target.files?.[0];
-    // if (!file) return;
-    // if (file.size > MAX_FILE_SIZE) {
-    //   toast.error('Image must be smaller than 2MB');
-    //   return;
-    // }
-    // setNewImage(file);
+    if (image) handleDeleteImage();
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error('Image must be smaller than 2MB');
+      return;
+    }
+    setNewImage(file);
   };
 
   // TODO
   const handleImageUpload = async (file: File | null) => {
-    // if (!file) return;
-    // const ext = file.name.split('.').pop();
-    // const newFileName = `${crypto.randomUUID()}.${ext}`;
-    // const { error } = await supabase.storage
-    //   .from('blog-images')
-    //   .upload(`public/${newFileName}`, file, {
-    //     cacheControl: '3600',
-    //     upsert: false,
-    //   });
-    // if (error) {
-    //   toast.error(`Failed to upload image. ${error.message}`);
-    //   return;
-    // }
-    // return newFileName;
+    if (!file) return;
+    const ext = file.name.split('.').pop();
+    const newFileName = `${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage
+      .from('blog-images')
+      .upload(`public/${newFileName}`, file, {
+        cacheControl: '3600',
+        upsert: false,
+      });
+    if (error) {
+      toast.error(`Failed to upload image. ${error.message}`);
+      return;
+    }
+    return newFileName;
   };
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const updatedBlog = {
+    let imagePath: string | null = null;
+
+    if (newImage) {
+      const fileName = await handleImageUpload(newImage);
+      if (!fileName) return;
+
+      imagePath = `public/${fileName}`;
+    }
+
+    const updatedBlog: { title: string; body: string; image_path?: string } = {
       title: title.trim(),
       body: body.trim(),
     };
+
+    if (imagePath) {
+      updatedBlog.image_path = imagePath;
+    }
 
     const { error } = await supabase
       .from('blogs')
@@ -119,7 +131,7 @@ function UpdateBlogPage() {
   return (
     <>
       <BackButton />
-      <h1 className="text-3xl font-bold my-3">Create a New Blog</h1>
+      <h1 className="text-3xl font-bold my-3">Update Blog</h1>
       <form onSubmit={handleUpdate} className="space-y-4">
         <input
           type="text"
@@ -175,7 +187,7 @@ function UpdateBlogPage() {
               Delete Image
             </button>
             <p className="text-sm">
-              Warning! This will permanently delete this image.
+              Warning! Deleting or changing will permanently delete this image.
             </p>
           </div>
         )}
