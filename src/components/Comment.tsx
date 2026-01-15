@@ -9,11 +9,17 @@ type CommentProps = {
   comment: CommentEntry;
   commentIndex: number;
   onUpdate: (comment: CommentEntry) => void;
+  onDelete: (commentId: number) => void;
 };
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
-const Comment = ({ comment, commentIndex, onUpdate }: CommentProps) => {
+const Comment = ({
+  comment,
+  commentIndex,
+  onUpdate,
+  onDelete,
+}: CommentProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [body, setBody] = useState('');
   const [image, setImage] = useState<string | null>(null);
@@ -141,11 +147,27 @@ const Comment = ({ comment, commentIndex, onUpdate }: CommentProps) => {
     toast.success('Comment updated!');
   };
 
-  const handleEditButton = () => {
+  const handleEdit = () => {
     const thumbnail = fetchImage() || null;
     setIsEditing(true);
     setBody(comment.body);
     setImage(thumbnail);
+  };
+
+  const handleDelete = async () => {
+    const { error } = await supabase
+      .from('comments')
+      .delete()
+      .eq('id', comment.id);
+
+    if (error) {
+      toast.error(`Failed to delete comment: ${error.message}`);
+      return;
+    }
+
+    handleDeleteImage();
+    onDelete(comment.id);
+    toast.success('Blog successfully deleted!');
   };
 
   return (
@@ -181,12 +203,15 @@ const Comment = ({ comment, commentIndex, onUpdate }: CommentProps) => {
           {isCommenter && (
             <div className="flex gap-2">
               <button
-                onClick={handleEditButton}
+                onClick={handleEdit}
                 className="text-sm bg-blue-400 px-2 py-0.5 w-18 rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition"
               >
                 Edit
               </button>
-              <button className="text-sm bg-red-400 px-2 py-0.5 w-18 rounded-md text-gray-800 cursor-pointer hover:bg-red-800 hover:text-gray-100 transition">
+              <button
+                onClick={handleDelete}
+                className="text-sm bg-red-400 px-2 py-0.5 w-18 rounded-md text-gray-800 cursor-pointer hover:bg-red-800 hover:text-gray-100 transition"
+              >
                 Delete
               </button>
             </div>

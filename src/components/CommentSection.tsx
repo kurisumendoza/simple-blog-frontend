@@ -99,6 +99,14 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
     });
   };
 
+  const deleteComment = (commentId: number) => {
+    setCommentList((prevList) => {
+      if (!prevList) return prevList;
+
+      return prevList.filter((comment) => comment.id !== commentId);
+    });
+  };
+
   useEffect(() => {
     const loadComments = async () => {
       const data = await fetchComments(blogId);
@@ -190,6 +198,7 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
               comment={comment}
               commentIndex={i}
               onUpdate={updateComment}
+              onDelete={deleteComment}
             />
           ))}
         </div>
