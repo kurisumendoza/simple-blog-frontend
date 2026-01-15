@@ -1,7 +1,21 @@
-import type { BlogEntry } from '@/types/BlogEntry';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase-client';
 import { Link } from '@tanstack/react-router';
+import type { BlogEntry } from '@/types/BlogEntry';
 
 const BlogPreview = ({ blog }: { blog: BlogEntry }) => {
+  const [image, setImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!blog?.image_path) return;
+
+    const { data } = supabase.storage
+      .from('blog-images')
+      .getPublicUrl(blog.image_path);
+
+    setImage(data.publicUrl);
+  }, [blog?.image_path]);
+
   return (
     <li className="py-4">
       <h2 className="text-xl font-semibold">{blog.title}</h2>
@@ -20,9 +34,18 @@ const BlogPreview = ({ blog }: { blog: BlogEntry }) => {
           })}
         </span>
       </div>
-      <p className="my-2">
-        {blog.body.length > 100 ? `${blog.body.slice(0, 120)}...` : blog.body}
-      </p>
+      <div className="flex justify-between">
+        <p className="my-2">
+          {blog.body.length > 100 ? `${blog.body.slice(0, 120)}...` : blog.body}
+        </p>
+        {image && (
+          <img
+            src={image}
+            alt="Preview"
+            className="mt-1 h-20 rounded-md object-cover w-[25%]"
+          />
+        )}
+      </div>
       <Link
         to="/blogs/$blogId"
         params={{ blogId: blog.slug }}
