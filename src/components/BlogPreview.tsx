@@ -18,7 +18,9 @@ const BlogPreview = ({ blog }: { blog: BlogEntry }) => {
 
   return (
     <li className="py-4">
-      <h2 className="text-xl font-semibold">{blog.title}</h2>
+      <h2 className="text-xl font-semibold">
+        {blog.title.length > 50 ? `${blog.title.slice(0, 50)}...` : blog.title}
+      </h2>
       <div className="flex justify-between text-sm">
         <div>
           <span>by: </span>
