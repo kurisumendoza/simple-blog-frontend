@@ -140,7 +140,7 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
             value={body}
             placeholder="Leave a comment"
             maxLength={300}
-            onChange={(e) => setBody(e.target.value)}
+            onChange={(e) => setBody(e.target.value.slice(0, 300))}
             className="w-full border rounded-md py-2 px-3 resize-none"
             required
           />

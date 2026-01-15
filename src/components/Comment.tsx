@@ -227,7 +227,7 @@ const Comment = ({
               value={body}
               placeholder="Update your comment"
               maxLength={300}
-              onChange={(e) => setBody(e.target.value)}
+              onChange={(e) => setBody(e.target.value.slice(0, 300))}
               className="w-full border rounded-md py-2 px-3 resize-none"
               required
             />

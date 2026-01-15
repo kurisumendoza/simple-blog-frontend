@@ -124,7 +124,7 @@ function CreateBlogPage() {
           value={title}
           placeholder="Title"
           maxLength={100}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value.slice(0, 100))}
           className="border w-full rounded-md px-3 py-1"
           required
         />
@@ -133,7 +133,7 @@ function CreateBlogPage() {
           value={body}
           placeholder="Write your content"
           maxLength={10000}
-          onChange={(e) => setBody(e.target.value)}
+          onChange={(e) => setBody(e.target.value.slice(0, 10000))}
           className="border w-full rounded-md px-3 py-1 min-h-100"
           required
         />
