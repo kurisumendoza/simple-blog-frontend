@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
 import type { RootState } from '@/store/store';
 import { Link } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
+import { fetchComments } from '@/lib/comments';
+import type { CommentEntry } from '@/types/CommentEntry';
+import Comment from './Comment';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
@@ -14,6 +17,7 @@ const CommentSection = ({
   blogId: number;
   ownerId: string;
 }) => {
+  const [commentList, setCommentList] = useState<CommentEntry[] | null>(null);
   const [body, setBody] = useState('');
   const [image, setImage] = useState<File | null>(null);
 
@@ -93,6 +97,15 @@ const CommentSection = ({
     toast.success('Comment posted!');
   };
 
+  useEffect(() => {
+    const loadComments = async () => {
+      const data = await fetchComments(blogId);
+      if (data) setCommentList(data);
+    };
+
+    loadComments();
+  }, []);
+
   return (
     <div className="mt-5">
       <h3 className="text-xl font-bold mt-3">Comments</h3>
@@ -161,6 +174,23 @@ const CommentSection = ({
             Submit
           </button>
         </form>
+      )}
+
+      {!commentList && (
+        <p className="opacity-50">Be the first one to comment.</p>
+      )}
+
+      {commentList && (
+        <div className="divide-y divide-solid divide-gray-500">
+          {commentList.map((comment, i) => (
+            <Comment
+              key={comment.id}
+              isOwner={isOwner}
+              comment={comment}
+              commentIndex={i}
+            />
+          ))}
+        </div>
       )}
 
       {/* {!isOwner && <p>not my blog</p>}
