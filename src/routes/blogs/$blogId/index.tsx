@@ -81,7 +81,7 @@ function BlogPage() {
           </div>
         </>
       )}
-      <CommentSection blogId={blog.id} ownerId={blog.user_id} />
+      <CommentSection blogId={blog.id} />
     </>
   );
 }

@@ -10,13 +10,7 @@ import Comment from './Comment';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
-const CommentSection = ({
-  blogId,
-  ownerId,
-}: {
-  blogId: number;
-  ownerId: string;
-}) => {
+const CommentSection = ({ blogId }: { blogId: number }) => {
   const [commentList, setCommentList] = useState<CommentEntry[] | null>(null);
   const [body, setBody] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -24,8 +18,6 @@ const CommentSection = ({
   const { user: currentUser, authId: currentUserAuthId } = useSelector(
     (state: RootState) => state.auth
   );
-
-  const isOwner = currentUserAuthId === ownerId;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -183,18 +175,10 @@ const CommentSection = ({
       {commentList && (
         <div className="divide-y divide-solid divide-gray-500">
           {commentList.map((comment, i) => (
-            <Comment
-              key={comment.id}
-              isOwner={isOwner}
-              comment={comment}
-              commentIndex={i}
-            />
+            <Comment key={comment.id} comment={comment} commentIndex={i} />
           ))}
         </div>
       )}
-
-      {/* {!isOwner && <p>not my blog</p>}
-      {isOwner && <p>my blog</p>} */}
     </div>
   );
 };
