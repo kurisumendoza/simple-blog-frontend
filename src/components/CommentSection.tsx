@@ -130,13 +130,13 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
               <>
                 <p>Add image (optional)</p>
                 <label
-                  htmlFor="image"
+                  htmlFor="main-comment-image"
                   className="bg-blue-300 rounded-md text-gray-950 px-3 py-1 cursor-pointer"
                 >
                   Choose File
                 </label>
                 <input
-                  id="image"
+                  id="main-comment-image"
                   type="file"
                   accept="image/png, image/jpeg"
                   onChange={handleImageChange}
