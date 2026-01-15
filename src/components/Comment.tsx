@@ -275,9 +275,21 @@ const Comment = ({
               )}
             </div>
 
-            <button className="text-sm bg-blue-400 w-18 px-2 py-1 rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition">
-              Update
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="text-sm bg-blue-400 w-18 px-2 py-1 rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition"
+              >
+                Update
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="text-sm bg-red-400 w-18 px-2 py-1 rounded-md text-gray-800 cursor-pointer hover:bg-red-800 hover:text-gray-100 transition"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         </>
       )}
