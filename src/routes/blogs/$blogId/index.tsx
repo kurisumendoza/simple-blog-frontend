@@ -1,11 +1,12 @@
-import BackButton from '@/components/BackButton';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { fetchBlogBySlug } from '@/lib/blogs';
 import { supabase } from '@/lib/supabase-client';
 import type { RootState } from '@/store/store';
 import type { BlogEntry } from '@/types/BlogEntry';
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import BackButton from '@/components/BackButton';
+import CommentSection from '@/components/CommentSection';
 
 export const Route = createFileRoute('/blogs/$blogId/')({
   component: BlogPage,
@@ -80,6 +81,7 @@ function BlogPage() {
           </div>
         </>
       )}
+      <CommentSection blogId={blog.id} ownerId={blog.user_id} />
     </>
   );
 }
