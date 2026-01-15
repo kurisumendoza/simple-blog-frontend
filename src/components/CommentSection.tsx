@@ -73,9 +73,10 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
       body: body.trim(),
     };
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('comments')
       .insert(newComment)
+      .select()
       .single();
 
     if (error) {
@@ -85,6 +86,7 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
 
     setBody('');
     setImage(null);
+    setCommentList((prevList) => (prevList ? [...prevList, data] : [data]));
 
     toast.success('Comment posted!');
   };
