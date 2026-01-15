@@ -8,11 +8,12 @@ import toast from 'react-hot-toast';
 type CommentProps = {
   comment: CommentEntry;
   commentIndex: number;
+  onUpdate: (comment: CommentEntry) => void;
 };
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
-const Comment = ({ comment, commentIndex }: CommentProps) => {
+const Comment = ({ comment, commentIndex, onUpdate }: CommentProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [body, setBody] = useState('');
   const [image, setImage] = useState<string | null>(null);
@@ -49,6 +50,8 @@ const Comment = ({ comment, commentIndex }: CommentProps) => {
 
   const handleDeleteImage = async () => {
     if (!image) return setNewImage(null);
+
+    if (!comment.image_path) return;
 
     const { error } = await supabase.storage
       .from('comment-images')
@@ -127,6 +130,13 @@ const Comment = ({ comment, commentIndex }: CommentProps) => {
 
     setBody('');
     setImage(null);
+    setNewImage(null);
+    setIsEditing(false);
+    onUpdate({
+      ...comment,
+      body: body.trim(),
+      image_path: imagePath,
+    });
 
     toast.success('Comment updated!');
   };

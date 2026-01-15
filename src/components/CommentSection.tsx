@@ -89,6 +89,16 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
     toast.success('Comment posted!');
   };
 
+  const updateComment = (updatedComment: CommentEntry) => {
+    setCommentList((prevList) => {
+      if (!prevList) return prevList;
+
+      return prevList?.map((oldComment) =>
+        oldComment.id === updatedComment.id ? updatedComment : oldComment
+      );
+    });
+  };
+
   useEffect(() => {
     const loadComments = async () => {
       const data = await fetchComments(blogId);
@@ -175,7 +185,12 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
       {commentList && (
         <div className="divide-y divide-solid divide-gray-500">
           {commentList.map((comment, i) => (
-            <Comment key={comment.id} comment={comment} commentIndex={i} />
+            <Comment
+              key={comment.id}
+              comment={comment}
+              commentIndex={i}
+              onUpdate={updateComment}
+            />
           ))}
         </div>
       )}

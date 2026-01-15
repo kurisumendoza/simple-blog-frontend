@@ -5,5 +5,5 @@ export type CommentEntry = {
   user_id: string;
   blog_id: string;
   body: string;
-  image_path: string;
+  image_path: string | null;
 };
