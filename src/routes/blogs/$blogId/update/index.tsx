@@ -1,7 +1,10 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase-client';
-import { fetchBlogBySlug } from '@/services/blogs';
+import {
+  fetchBlogBySlug,
+  updateBlog,
+  updateBlogWithoutImage,
+} from '@/services/blogs';
 import { deleteImage, fetchImage, uploadImage } from '@/services/storage';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
@@ -46,17 +49,10 @@ function UpdateBlogPage() {
       return;
     }
 
-    const removeImagePath = {
-      image_path: null,
-    };
+    const noImageUpdateRes = await updateBlogWithoutImage(blog.id);
 
-    const { error: removeError } = await supabase
-      .from('blogs')
-      .update(removeImagePath)
-      .eq('id', blog.id);
-
-    if (removeError) {
-      toast.error(`Failed to remove image path. ${removeError.message}`);
+    if (!noImageUpdateRes.success) {
+      toast.error(`Failed to remove image path. ${noImageUpdateRes.message}`);
       return;
     }
 
@@ -110,13 +106,10 @@ function UpdateBlogPage() {
       updatedBlog.image_path = imagePath;
     }
 
-    const { error } = await supabase
-      .from('blogs')
-      .update(updatedBlog)
-      .eq('id', blog.id);
+    const updateRes = await updateBlog(updatedBlog, blog.id);
 
-    if (error) {
-      toast.error(`Failed to update blog: ${error.message}`);
+    if (!updateRes.success) {
+      toast.error(`Failed to update blog: ${updateRes.message}`);
       return;
     }
 

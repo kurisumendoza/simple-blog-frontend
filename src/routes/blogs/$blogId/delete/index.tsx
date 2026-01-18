@@ -4,8 +4,7 @@ import {
   redirect,
   useNavigate,
 } from '@tanstack/react-router';
-import { supabase } from '@/lib/supabase-client';
-import { fetchBlogBySlug } from '@/services/blogs';
+import { deleteBlog, fetchBlogBySlug } from '@/services/blogs';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
@@ -29,10 +28,10 @@ function DeletePage() {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    const { error } = await supabase.from('blogs').delete().eq('id', blog.id);
+    const deleteRes = await deleteBlog(blog.id);
 
-    if (error) {
-      toast.error(`Failed to delete blog: ${error.message}`);
+    if (!deleteRes.success) {
+      toast.error(`Failed to delete blog: ${deleteRes.message}`);
       return;
     }
 

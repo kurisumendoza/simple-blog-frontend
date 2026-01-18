@@ -1,13 +1,13 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { supabase } from '@/lib/supabase-client';
 import { fetchSession } from '@/services/auth';
+import { createBlog } from '@/services/blogs';
 import { uploadImage } from '@/services/storage';
 import { generateUniqueSlug } from '@/utils/generateSlug.ts';
 import type { RootState } from '@/store/store';
-import toast from 'react-hot-toast';
 import BackButton from '@/components/BackButton';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/blogs/create/')({
   component: CreateBlogPage,
@@ -85,10 +85,10 @@ function CreateBlogPage() {
       image_path: imagePath,
     };
 
-    const { error } = await supabase.from('blogs').insert(newBlog).single();
+    const createRes = await createBlog(newBlog);
 
-    if (error) {
-      toast.error(`Failed to create a blog: ${error.message}`);
+    if (!createRes.success) {
+      toast.error(`Failed to create a blog: ${createRes.message}`);
       return;
     }
 
