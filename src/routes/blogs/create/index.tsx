@@ -2,7 +2,7 @@ import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
-import { fetchSession } from '@/lib/auth';
+import { fetchSession } from '@/services/auth';
 import { generateUniqueSlug } from '@/utils/generateSlug.ts';
 import type { RootState } from '@/store/store';
 import toast from 'react-hot-toast';

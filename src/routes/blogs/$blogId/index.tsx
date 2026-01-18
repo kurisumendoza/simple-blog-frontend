@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { fetchBlogBySlug } from '@/lib/blogs';
+import { fetchBlogBySlug } from '@/services/blogs';
 import { supabase } from '@/lib/supabase-client';
 import type { RootState } from '@/store/store';
 import type { BlogEntry } from '@/types/BlogEntry';

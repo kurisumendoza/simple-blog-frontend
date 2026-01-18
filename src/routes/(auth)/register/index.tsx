@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchSession, registerUser } from '@/lib/auth';
+import { fetchSession, registerUser } from '@/services/auth';
 import { setUser } from '@/store/authSlice';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';

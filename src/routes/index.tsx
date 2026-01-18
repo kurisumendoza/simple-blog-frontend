@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import type { BlogEntry } from '@/types/BlogEntry';
-import { fetchBlogs } from '@/lib/blogs';
+import { fetchBlogs } from '@/services/blogs';
 import BlogList from '@/components/BlogList';
 import Pagination from '@/components/Pagination';
 

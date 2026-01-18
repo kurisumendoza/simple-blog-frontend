@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase-client';
-import { fetchBlogBySlug } from '@/lib/blogs';
+import { fetchBlogBySlug } from '@/services/blogs';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';

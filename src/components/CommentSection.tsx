@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase-client';
 import type { RootState } from '@/store/store';
 import { Link } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
-import { fetchComments } from '@/lib/comments';
+import { fetchComments } from '@/services/comments';
 import type { CommentEntry } from '@/types/CommentEntry';
 import Comment from './Comment';
 
