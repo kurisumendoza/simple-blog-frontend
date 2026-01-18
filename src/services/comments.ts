@@ -12,8 +12,7 @@ type NewComment = {
 type UpdatedComment = { image_path: string | null; body: string | null };
 
 export const fetchComments = async (
-  blogId: number,
-  count?: number
+  blogId: number
 ): Promise<{
   success: boolean;
   data: CommentEntry[] | null;
@@ -23,8 +22,7 @@ export const fetchComments = async (
     .from('comments')
     .select('*')
     .eq('blog_id', blogId)
-    .order('created_at')
-    .range(0, count || 5);
+    .order('created_at');
 
   if (error) return { success: false, data: null, message: error.message };
 
@@ -73,6 +71,17 @@ export const deleteComment = async (commentId: number) => {
     .from('comments')
     .delete()
     .eq('id', commentId);
+
+  if (error) return { success: false, message: error.message };
+
+  return { success: true };
+};
+
+export const deleteAllComments = async (blogId: number) => {
+  const { error } = await supabase
+    .from('comments')
+    .delete()
+    .eq('blog_id', blogId);
 
   if (error) return { success: false, message: error.message };
 

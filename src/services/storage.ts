@@ -16,6 +16,14 @@ export const deleteImage = async (folder: string, path: string) => {
   return { success: true };
 };
 
+export const deleteMultipleImages = async (folder: string, paths: string[]) => {
+  const { error } = await supabase.storage.from(folder).remove(paths);
+
+  if (error) return { success: false, message: error.message };
+
+  return { success: true };
+};
+
 export const uploadImage = async (
   folder: string,
   filename: string,

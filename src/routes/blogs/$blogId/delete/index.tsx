@@ -5,10 +5,11 @@ import {
   useNavigate,
 } from '@tanstack/react-router';
 import { deleteBlog, fetchBlogBySlug } from '@/services/blogs';
+import { deleteAllComments, fetchComments } from '@/services/comments';
+import { deleteImage, deleteMultipleImages } from '@/services/storage';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
-import { deleteImage } from '@/services/storage';
 
 export const Route = createFileRoute('/blogs/$blogId/delete/')({
   component: DeletePage,
@@ -28,8 +29,33 @@ function DeletePage() {
   const blog: BlogEntry = Route.useLoaderData();
   const navigate = useNavigate();
 
+  const deleteComments = async () => {
+    const comments = await fetchComments(blog.id);
+
+    if (!comments.success) return;
+
+    if (comments.data?.length) {
+      const commentImages = comments.data
+        .filter((comment) => comment.image_path)
+        .map((comment) => comment.image_path as string);
+
+      if (commentImages.length) {
+        await deleteMultipleImages('comment-images', commentImages);
+      }
+    }
+
+    const deleteCommentsRes = await deleteAllComments(blog.id);
+
+    if (!deleteCommentsRes.success) {
+      console.error(deleteCommentsRes.message);
+      return;
+    }
+  };
+
   const handleDelete = async () => {
-    if (blog.image_path) deleteImage('blog-images', blog.image_path);
+    if (blog.image_path) await deleteImage('blog-images', blog.image_path);
+
+    await deleteComments();
 
     const deleteRes = await deleteBlog(blog.id);
 
