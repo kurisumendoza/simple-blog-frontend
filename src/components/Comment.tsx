@@ -1,10 +1,14 @@
 import { useSelector } from 'react-redux';
-import { supabase } from '@/lib/supabase-client';
+import { useState } from 'react';
+import { deleteImage, fetchImage, uploadImage } from '@/services/storage';
+import {
+  deleteComment,
+  updateComment,
+  updateCommentWithoutImage,
+} from '@/services/comments';
 import type { RootState } from '@/store/store';
 import type { CommentEntry } from '@/types/CommentEntry';
-import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { deleteImage, fetchImage, uploadImage } from '@/services/storage';
 
 type CommentProps = {
   comment: CommentEntry;
@@ -52,24 +56,17 @@ const Comment = ({
 
     if (!path) return;
 
-    const deleteRes = await deleteImage(folder, path);
+    const deleteImageRes = await deleteImage(folder, path);
 
-    if (!deleteRes.success) {
-      toast.error(`Failed to delete image. ${deleteRes.message}`);
+    if (!deleteImageRes.success) {
+      toast.error(`Failed to delete image. ${deleteImageRes.message}`);
       return;
     }
 
-    const removeImagePath = {
-      image_path: null,
-    };
+    const noImageUpdateRes = await updateCommentWithoutImage(comment.id);
 
-    const { error: removeError } = await supabase
-      .from('comments')
-      .update(removeImagePath)
-      .eq('id', comment.id);
-
-    if (removeError) {
-      toast.error(`Failed to remove image path. ${removeError.message}`);
+    if (!noImageUpdateRes.success) {
+      toast.error(`Failed to remove image path. ${noImageUpdateRes.message}`);
       return;
     }
 
@@ -105,18 +102,15 @@ const Comment = ({
       imagePath = `public/${fileName}`;
     }
 
-    const newComment = {
+    const updatedComment = {
       image_path: imagePath,
       body: body.trim(),
     };
 
-    const { error } = await supabase
-      .from('comments')
-      .update(newComment)
-      .eq('id', comment.id);
+    const updateRes = await updateComment(updatedComment, comment.id);
 
-    if (error) {
-      toast.error(`Failed to post a comment: ${error.message}`);
+    if (!updateRes.success) {
+      toast.error(`Failed to post a comment: ${updateRes.message}`);
       return;
     }
 
@@ -141,13 +135,10 @@ const Comment = ({
   };
 
   const handleDelete = async () => {
-    const { error } = await supabase
-      .from('comments')
-      .delete()
-      .eq('id', comment.id);
+    const deleteRes = await deleteComment(comment.id);
 
-    if (error) {
-      toast.error(`Failed to delete comment: ${error.message}`);
+    if (!deleteRes.success) {
+      toast.error(`Failed to delete comment: ${deleteRes.message}`);
       return;
     }
 

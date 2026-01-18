@@ -1,13 +1,12 @@
+import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { supabase } from '@/lib/supabase-client';
-import { fetchComments } from '@/services/comments';
-import { Link } from '@tanstack/react-router';
+import { createComment, fetchComments } from '@/services/comments';
+import { uploadImage } from '@/services/storage';
 import type { RootState } from '@/store/store';
 import type { CommentEntry } from '@/types/CommentEntry';
 import Comment from './Comment';
 import toast from 'react-hot-toast';
-import { uploadImage } from '@/services/storage';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
@@ -69,20 +68,18 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
       body: body.trim(),
     };
 
-    const { data, error } = await supabase
-      .from('comments')
-      .insert(newComment)
-      .select()
-      .single();
+    const commentRes = await createComment(newComment);
 
-    if (error) {
-      toast.error(`Failed to post a comment: ${error.message}`);
+    if (!commentRes.success) {
+      toast.error(`Failed to post a comment: ${commentRes.message}`);
       return;
     }
 
     setBody('');
     setImage(null);
-    setCommentList((prevList) => (prevList ? [...prevList, data] : [data]));
+    setCommentList((prevList) =>
+      prevList ? [...prevList, commentRes.data] : [commentRes.data]
+    );
 
     toast.success('Comment posted!');
   };
@@ -107,8 +104,14 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
 
   useEffect(() => {
     const loadComments = async () => {
-      const data = await fetchComments(blogId);
-      if (data) setCommentList(data);
+      const loadRes = await fetchComments(blogId);
+
+      if (!loadRes.success) {
+        toast.error(`Error loading comments: ${loadRes.message}`);
+        return null;
+      }
+
+      if (loadRes.success) setCommentList(loadRes.data);
     };
 
     loadComments();
