@@ -1,10 +1,9 @@
 import { supabase } from '@/lib/supabase-client';
-import toast from 'react-hot-toast';
 
 const BLOGS_PER_PAGE = 5;
 
 export const fetchBlogs = async (currentPage: number) => {
-  const { error, data, count } = await supabase
+  const { data, count, error } = await supabase
     .from('blogs')
     .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
@@ -13,27 +12,21 @@ export const fetchBlogs = async (currentPage: number) => {
       currentPage * BLOGS_PER_PAGE - 1
     );
 
-  if (error) {
-    toast.error(`Error loading blogs: ${error.message}`);
-    return;
-  }
+  if (error) return { success: false, message: error.message };
 
   const totalPages = count ? Math.ceil(count / BLOGS_PER_PAGE) : 0;
 
-  return { data, count, totalPages };
+  return { success: true, data, count, totalPages };
 };
 
 export const fetchBlogBySlug = async (slug: string) => {
-  const { error, data } = await supabase
+  const { data, error } = await supabase
     .from('blogs')
     .select('*')
     .eq('slug', slug)
     .single();
 
-  if (error) {
-    toast.error(`Error loading blog: ${error.message}`);
-    return;
-  }
+  if (error) return { success: false, message: error.message };
 
-  return data;
+  return { success: true, data };
 };

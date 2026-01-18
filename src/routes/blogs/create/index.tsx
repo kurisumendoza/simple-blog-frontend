@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
 import { fetchSession } from '@/services/auth';
+import { uploadImage } from '@/services/storage';
 import { generateUniqueSlug } from '@/utils/generateSlug.ts';
 import type { RootState } from '@/store/store';
 import toast from 'react-hot-toast';
 import BackButton from '@/components/BackButton';
-import { uploadImage } from '@/services/storage';
 
 export const Route = createFileRoute('/blogs/create/')({
   component: CreateBlogPage,

@@ -7,11 +7,19 @@ import type { RootState } from '@/store/store';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import CommentSection from '@/components/CommentSection';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/blogs/$blogId/')({
   component: BlogPage,
   loader: async ({ params }) => {
-    return fetchBlogBySlug(params.blogId);
+    const blog = await fetchBlogBySlug(params.blogId);
+
+    if (!blog.success) {
+      toast.error(`Error loading blog: ${blog.message}`);
+      return null;
+    }
+
+    return blog.data;
   },
 });
 

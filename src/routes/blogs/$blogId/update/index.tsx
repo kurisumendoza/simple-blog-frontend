@@ -10,7 +10,14 @@ import toast from 'react-hot-toast';
 export const Route = createFileRoute('/blogs/$blogId/update/')({
   component: UpdateBlogPage,
   loader: async ({ params }) => {
-    return fetchBlogBySlug(params.blogId);
+    const blog = await fetchBlogBySlug(params.blogId);
+
+    if (!blog.success) {
+      toast.error(`Error loading blog: ${blog.message}`);
+      return null;
+    }
+
+    return blog.data;
   },
 });
 

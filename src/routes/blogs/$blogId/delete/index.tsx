@@ -15,12 +15,12 @@ export const Route = createFileRoute('/blogs/$blogId/delete/')({
   loader: async ({ params }) => {
     const blog = await fetchBlogBySlug(params.blogId);
 
-    if (!blog) {
-      toast.error('Oops, that blog no longer exists!');
+    if (!blog.success) {
+      toast.error(`Oops, that blog no longer exists!: ${blog.message}`);
       throw redirect({ to: '/' });
     }
 
-    return blog;
+    return blog.data;
   },
 });
 
