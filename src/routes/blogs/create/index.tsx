@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
 import { fetchSession } from '@/lib/auth';
+import { generateUniqueSlug } from '@/utils/generateSlug.ts';
 import type { RootState } from '@/store/store';
 import toast from 'react-hot-toast';
 import BackButton from '@/components/BackButton';
@@ -32,18 +33,6 @@ function CreateBlogPage() {
     (state: RootState) => state.auth.authId
   );
   const navigate = useNavigate();
-
-  const generateUniqueSlug = (string: string) => {
-    const textString = string
-      .slice(0, 30)
-      .trim()
-      .toLowerCase()
-      .split(' ')
-      .join('-');
-    const uuid = crypto.randomUUID().slice(0, 6);
-
-    return `${textString}-${uuid}`;
-  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
