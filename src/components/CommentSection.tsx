@@ -7,6 +7,7 @@ import type { RootState } from '@/store/store';
 import type { CommentEntry } from '@/types/CommentEntry';
 import Comment from './Comment';
 import toast from 'react-hot-toast';
+import { generateFilename } from '@/utils/generateFilename';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
@@ -35,9 +36,7 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
   const handleImageUpload = async (file: File | null) => {
     if (!file) return;
 
-    const ext = file.name.split('.').pop();
-    const newFileName = `${crypto.randomUUID()}.${ext}`;
-
+    const newFileName = generateFilename(file);
     const uploadRes = await uploadImage('comment-images', newFileName, file);
 
     if (!uploadRes.success) {

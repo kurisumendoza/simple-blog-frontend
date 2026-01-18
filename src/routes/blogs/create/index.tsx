@@ -8,6 +8,7 @@ import { generateUniqueSlug } from '@/utils/generateSlug.ts';
 import type { RootState } from '@/store/store';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
+import { generateFilename } from '@/utils/generateFilename';
 
 export const Route = createFileRoute('/blogs/create/')({
   component: CreateBlogPage,
@@ -51,9 +52,7 @@ function CreateBlogPage() {
   const handleImageUpload = async (file: File | null) => {
     if (!file) return;
 
-    const ext = file.name.split('.').pop();
-    const newFileName = `${crypto.randomUUID()}.${ext}`;
-
+    const newFileName = generateFilename(file);
     const uploadRes = await uploadImage('blog-images', newFileName, file);
 
     if (!uploadRes.success) {

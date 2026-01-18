@@ -9,6 +9,7 @@ import {
 import type { RootState } from '@/store/store';
 import type { CommentEntry } from '@/types/CommentEntry';
 import toast from 'react-hot-toast';
+import { generateFilename } from '@/utils/generateFilename';
 
 type CommentProps = {
   comment: CommentEntry;
@@ -77,9 +78,7 @@ const Comment = ({
   const handleImageUpload = async (file: File | null) => {
     if (!file) return;
 
-    const ext = file.name.split('.').pop();
-    const newFileName = `${crypto.randomUUID()}.${ext}`;
-
+    const newFileName = generateFilename(file);
     const uploadRes = await uploadImage(folder, newFileName, file);
 
     if (!uploadRes.success) {

@@ -6,6 +6,7 @@ import {
   updateBlogWithoutImage,
 } from '@/services/blogs';
 import { deleteImage, fetchImage, uploadImage } from '@/services/storage';
+import { generateFilename } from '@/utils/generateFilename';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
@@ -72,9 +73,8 @@ function UpdateBlogPage() {
 
   const handleImageUpload = async (file: File | null) => {
     if (!file) return;
-    const ext = file.name.split('.').pop();
-    const newFileName = `${crypto.randomUUID()}.${ext}`;
 
+    const newFileName = generateFilename(file);
     const uploadRes = await uploadImage(folder, newFileName, file);
 
     if (!uploadRes.success) {
