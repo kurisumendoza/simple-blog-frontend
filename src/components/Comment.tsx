@@ -4,6 +4,7 @@ import type { RootState } from '@/store/store';
 import type { CommentEntry } from '@/types/CommentEntry';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { deleteImage, fetchImage, uploadImage } from '@/services/storage';
 
 type CommentProps = {
   comment: CommentEntry;
@@ -30,16 +31,8 @@ const Comment = ({
   );
 
   const isCommenter = currentUserAuthId === comment.user_id;
-
-  const fetchImage = () => {
-    if (!comment.image_path) return;
-
-    const { data } = supabase.storage
-      .from('comment-images')
-      .getPublicUrl(comment.image_path);
-
-    return data.publicUrl;
-  };
+  const folder = 'comment-images';
+  const path = comment.image_path;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,14 +50,12 @@ const Comment = ({
   const handleDeleteImage = async () => {
     if (!image) return setNewImage(null);
 
-    if (!comment.image_path) return;
+    if (!path) return;
 
-    const { error } = await supabase.storage
-      .from('comment-images')
-      .remove([comment.image_path]);
+    const deleteRes = await deleteImage(folder, path);
 
-    if (error) {
-      toast.error(`Failed to delete image. ${error.message}`);
+    if (!deleteRes.success) {
+      toast.error(`Failed to delete image. ${deleteRes.message}`);
       return;
     }
 
@@ -92,15 +83,10 @@ const Comment = ({
     const ext = file.name.split('.').pop();
     const newFileName = `${crypto.randomUUID()}.${ext}`;
 
-    const { error } = await supabase.storage
-      .from('comment-images')
-      .upload(`public/${newFileName}`, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
+    const uploadRes = await uploadImage(folder, newFileName, file);
 
-    if (error) {
-      toast.error(`Failed to upload image. ${error.message}`);
+    if (!uploadRes.success) {
+      toast.error(`Failed to upload image. ${uploadRes.message}`);
       return;
     }
 
@@ -148,7 +134,7 @@ const Comment = ({
   };
 
   const handleEdit = () => {
-    const thumbnail = fetchImage() || null;
+    const thumbnail = fetchImage(folder, path) || null;
     setIsEditing(true);
     setBody(comment.body);
     setImage(thumbnail);
@@ -195,7 +181,7 @@ const Comment = ({
           <div className="flex">
             <p>{comment.body}</p>
             <img
-              src={fetchImage()}
+              src={fetchImage(folder, path)}
               alt=""
               className="ml-auto max-w-20 rounded-md"
             />

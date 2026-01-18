@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase-client';
 import { fetchBlogBySlug } from '@/services/blogs';
+import { deleteImage, fetchImage, uploadImage } from '@/services/storage';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
@@ -25,15 +26,16 @@ function UpdateBlogPage() {
 
   const navigate = useNavigate();
 
+  const folder = 'blog-images';
+  const path = blog.image_path;
+
   const handleDeleteImage = async () => {
     if (!image) return setNewImage(null);
 
-    const { error } = await supabase.storage
-      .from('blog-images')
-      .remove([blog.image_path]);
+    const deleteRes = await deleteImage(folder, path);
 
-    if (error) {
-      toast.error(`Failed to delete image. ${error.message}`);
+    if (!deleteRes.success) {
+      toast.error(`Failed to delete image. ${deleteRes.message}`);
       return;
     }
 
@@ -65,21 +67,18 @@ function UpdateBlogPage() {
     setNewImage(file);
   };
 
-  // TODO
   const handleImageUpload = async (file: File | null) => {
     if (!file) return;
     const ext = file.name.split('.').pop();
     const newFileName = `${crypto.randomUUID()}.${ext}`;
-    const { error } = await supabase.storage
-      .from('blog-images')
-      .upload(`public/${newFileName}`, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
-    if (error) {
-      toast.error(`Failed to upload image. ${error.message}`);
+
+    const uploadRes = await uploadImage(folder, newFileName, file);
+
+    if (!uploadRes.success) {
+      toast.error(`Failed to upload image. ${uploadRes.message}`);
       return;
     }
+
     return newFileName;
   };
 
@@ -121,11 +120,9 @@ function UpdateBlogPage() {
   useEffect(() => {
     if (!blog?.image_path) return;
 
-    const { data } = supabase.storage
-      .from('blog-images')
-      .getPublicUrl(blog.image_path);
+    const imageURL = fetchImage(folder, path);
 
-    setImage(data.publicUrl);
+    if (imageURL) setImage(imageURL);
   }, [blog?.image_path]);
 
   return (

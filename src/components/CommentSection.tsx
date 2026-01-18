@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { supabase } from '@/lib/supabase-client';
-import type { RootState } from '@/store/store';
-import { Link } from '@tanstack/react-router';
-import toast from 'react-hot-toast';
 import { fetchComments } from '@/services/comments';
+import { Link } from '@tanstack/react-router';
+import type { RootState } from '@/store/store';
 import type { CommentEntry } from '@/types/CommentEntry';
 import Comment from './Comment';
+import toast from 'react-hot-toast';
+import { uploadImage } from '@/services/storage';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
@@ -38,15 +39,10 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
     const ext = file.name.split('.').pop();
     const newFileName = `${crypto.randomUUID()}.${ext}`;
 
-    const { error } = await supabase.storage
-      .from('comment-images')
-      .upload(`public/${newFileName}`, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
+    const uploadRes = await uploadImage('comment-images', newFileName, file);
 
-    if (error) {
-      toast.error(`Failed to upload image. ${error.message}`);
+    if (!uploadRes.success) {
+      toast.error(`Failed to upload image. ${uploadRes.message}`);
       return;
     }
 

@@ -7,6 +7,7 @@ import { generateUniqueSlug } from '@/utils/generateSlug.ts';
 import type { RootState } from '@/store/store';
 import toast from 'react-hot-toast';
 import BackButton from '@/components/BackButton';
+import { uploadImage } from '@/services/storage';
 
 export const Route = createFileRoute('/blogs/create/')({
   component: CreateBlogPage,
@@ -53,15 +54,10 @@ function CreateBlogPage() {
     const ext = file.name.split('.').pop();
     const newFileName = `${crypto.randomUUID()}.${ext}`;
 
-    const { error } = await supabase.storage
-      .from('blog-images')
-      .upload(`public/${newFileName}`, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
+    const uploadRes = await uploadImage('blog-images', newFileName, file);
 
-    if (error) {
-      toast.error(`Failed to upload image. ${error.message}`);
+    if (!uploadRes.success) {
+      toast.error(`Failed to upload image. ${uploadRes.message}`);
       return;
     }
 
