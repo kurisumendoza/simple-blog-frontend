@@ -54,7 +54,6 @@ const Comment = ({
 
   const handleDeleteImage = async () => {
     if (!image) return setNewImage(null);
-
     if (!path) return;
 
     const deleteImageRes = await deleteImage(folder, path);
@@ -134,6 +133,15 @@ const Comment = ({
   };
 
   const handleDelete = async () => {
+    if (path) {
+      const deleteImageRes = await deleteImage(folder, path);
+
+      if (!deleteImageRes.success) {
+        toast.error(`Failed to delete comment. ${deleteImageRes.message}`);
+        return;
+      }
+    }
+
     const deleteRes = await deleteComment(comment.id);
 
     if (!deleteRes.success) {
@@ -141,7 +149,6 @@ const Comment = ({
       return;
     }
 
-    handleDeleteImage();
     onDelete(comment.id);
     toast.success('Blog successfully deleted!');
   };

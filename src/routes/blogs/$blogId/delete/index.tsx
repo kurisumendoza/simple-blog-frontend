@@ -8,6 +8,7 @@ import { deleteBlog, fetchBlogBySlug } from '@/services/blogs';
 import type { BlogEntry } from '@/types/BlogEntry';
 import BackButton from '@/components/BackButton';
 import toast from 'react-hot-toast';
+import { deleteImage } from '@/services/storage';
 
 export const Route = createFileRoute('/blogs/$blogId/delete/')({
   component: DeletePage,
@@ -28,6 +29,8 @@ function DeletePage() {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
+    if (blog.image_path) deleteImage('blog-images', blog.image_path);
+
     const deleteRes = await deleteBlog(blog.id);
 
     if (!deleteRes.success) {
