@@ -15,9 +15,10 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
   const [commentList, setCommentList] = useState<CommentEntry[] | null>(null);
   const [body, setBody] = useState('');
   const [image, setImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user: currentUser, authId: currentUserAuthId } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +51,8 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     let imagePath: string | null = null;
 
     if (image) {
@@ -77,8 +80,9 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
     setBody('');
     setImage(null);
     setCommentList((prevList) =>
-      prevList ? [...prevList, commentRes.data] : [commentRes.data]
+      prevList ? [...prevList, commentRes.data] : [commentRes.data],
     );
+    setIsLoading(false);
 
     toast.success('Comment posted!');
   };
@@ -88,7 +92,7 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
       if (!prevList) return prevList;
 
       return prevList?.map((oldComment) =>
-        oldComment.id === updatedComment.id ? updatedComment : oldComment
+        oldComment.id === updatedComment.id ? updatedComment : oldComment,
       );
     });
   };
@@ -180,7 +184,10 @@ const CommentSection = ({ blogId }: { blogId: number }) => {
             )}
           </div>
 
-          <button className="bg-blue-400 w-[40%] px-3 py-0.5 rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition">
+          <button
+            disabled={isLoading}
+            className="bg-blue-400 w-[40%] px-3 py-0.5 rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition"
+          >
             Submit
           </button>
         </form>

@@ -29,10 +29,11 @@ function CreateBlogPage() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [image, setImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const currentUserAuthId = useSelector(
-    (state: RootState) => state.auth.authId
+    (state: RootState) => state.auth.authId,
   );
   const navigate = useNavigate();
 
@@ -66,6 +67,8 @@ function CreateBlogPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     let imagePath: string | null = null;
 
     if (image) {
@@ -93,6 +96,7 @@ function CreateBlogPage() {
 
     setTitle('');
     setBody('');
+    setIsLoading(false);
 
     toast.success('Blog successfully created!');
     navigate({ to: `/blogs/${newBlog.slug}` });
@@ -153,7 +157,10 @@ function CreateBlogPage() {
             </button>
           </div>
         )}
-        <button className="bg-blue-400 mt-5 mx-auto px-3 py-2 font-semibold rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition">
+        <button
+          disabled={isLoading}
+          className="bg-blue-400 mt-5 mx-auto px-3 py-2 font-semibold rounded-md text-gray-800 cursor-pointer hover:bg-blue-800 hover:text-gray-100 transition"
+        >
           Create Blog
         </button>
       </form>
